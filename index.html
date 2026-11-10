@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>がくしゅうはっぴょうかい おんげん</title>
+<style>
+  :root { --bg:#f6f3ec; --ink:#2b2a28; --sub:#7a756c; --accent:#6a7fd8; --line:#e6e0d4; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Hiragino Maru Gothic ProN","Hiragino Sans",system-ui,sans-serif; padding:24px 16px 48px; }
+  main { max-width:720px; margin:0 auto; }
+  h1 { font-size:1.5rem; margin:0 0 4px; }
+  .lead { color:var(--sub); margin:0 0 16px; font-size:.95rem; }
+  .list { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; }
+  .item { font:inherit; font-size:1.05rem; text-align:left; padding:16px 18px; border-radius:12px; border:1px solid var(--line); background:#fff; cursor:pointer; color:inherit; }
+  .item small { display:block; color:var(--sub); margin-top:2px; font-size:.85rem; }
+  .item.active { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent) inset; }
+  .audio { margin-top:20px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:24px 16px; text-align:center; }
+  .audio .t { font-size:1.3rem; font-weight:bold; margin-bottom:14px; }
+  audio { width:100%; }
+</style>
+</head>
+<body>
+<main>
+  <h1>🌈 がくしゅうはっぴょうかい</h1>
+  <p class="lead">がっしょうの れんしゅうよう。きょくを えらんで ▶ で きこう。</p>
+
+  <div class="list" id="list"></div>
+
+  <div class="audio"><div class="t" id="atitle"></div><audio id="audio" controls preload="metadata" controlsList="nodownload noplaybackrate"></audio></div>
+</main>
+<script>
+const ITEMS = [
+  { id:'gassho1', title:'1. 崖の上のポニョ', sub:'2分43秒', src:'media/gassho1.mp3' },
+  { id:'gassho2', title:'2. 君をのせて', sub:'2分13秒', src:'media/gassho2.mp3' },
+  { id:'gassho3', title:'3. カントリー・ロード', sub:'3分07秒', src:'media/gassho3.mp3' },
+  { id:'gassho4', title:'4. いつでも誰かが', sub:'3分45秒', src:'media/gassho4.mp3' },
+];
+const audio = document.getElementById('audio'), list = document.getElementById('list');
+let cur;
+audio.oncontextmenu = e => e.preventDefault();
+audio.disableRemotePlayback = true;
+// 速さは常に1倍に固定
+audio.onratechange = () => { if (audio.playbackRate !== 1) audio.playbackRate = 1; };
+function render() {
+  list.innerHTML = '';
+  ITEMS.forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'item' + (cur === v.id ? ' active' : '');
+    b.innerHTML = `<b>${v.title}</b><small>${v.sub}</small>`;
+    b.onclick = () => select(v);
+    list.appendChild(b);
+  });
+}
+function select(v) {
+  if (cur === v.id) return;
+  cur = v.id; render();
+  audio.pause();
+  document.getElementById('atitle').textContent = v.title;
+  audio.src = v.src;
+}
+select(ITEMS[0]);
+</script>
+</body>
+</html>
